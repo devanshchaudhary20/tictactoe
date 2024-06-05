@@ -4,6 +4,7 @@ import exceptions.DuplicateSymbolException;
 import exceptions.MoreThanOneBotException;
 import exceptions.PlayerCountDimensionMismatchedException;
 import models.Game;
+import models.GameState;
 import models.Player;
 import strategies.winningstrategies.WinningStrategy;
 
@@ -19,12 +20,12 @@ public class GameController {
                 .build();
     }
 
-    void makeMove(Game game) {
-
+    public void makeMove(Game game) {
+        game.makeMove();
     }
 
-    void checkState(Game game) {
-
+    public GameState checkState(Game game) {
+        return game.getGameState();
     }
 
     void undo(Game game) {
@@ -35,7 +36,7 @@ public class GameController {
 
     }
 
-    void printBoard(Game game) {
-
+    public void printBoard(Game game) {
+        game.printBoard();
     }
 }

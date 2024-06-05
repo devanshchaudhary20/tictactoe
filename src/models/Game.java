@@ -40,7 +40,7 @@ public class Game {
         private Builder() {
             this.players = new ArrayList<>();
             this.winningStrategies = new ArrayList<>();
-            this.dimension = 0;
+            this.dimension = 3;
         }
 
         public Builder setDimension(int dimension) {
@@ -113,7 +113,65 @@ public class Game {
             }
             return new Game(dimension, players, winningStrategies);
         }
+    }
 
+    public void printBoard() {
+        board.printBoard();
+    }
+
+    private boolean validateMove(Move move) {
+        int row = move.getCell().getRow();
+        int col = move.getCell().getCol();
+
+        if (row>=board.getSize() || col>=board.getSize()){
+            return false;
+        }
+
+        if (board.getBoard().get(row).get(col).getCellState().equals(CellState.EMPTY)){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkWinner(Board board, Move move) {
+        for (WinningStrategy winningStrategy : winningStrategies) {
+            if (winningStrategy.checkWinner(board, move)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void makeMove() {
+        Player currentMovePlayer = players.get(nextMovePlayerIndex);
+        System.out.println("It is " + currentMovePlayer.getName() + "'s turn. Please make your move!");
+        Move move = currentMovePlayer.makeMove(board);
+        System.out.println(currentMovePlayer.getName() + " has made a move at row: "+ move.getCell().getRow() + " and col: "+ move.getCell().getCol());
+
+        if (!validateMove(move)){
+            System.out.println("Please try again with a valid move!");
+            return;
+        }
+        int row = move.getCell().getRow();
+        int col = move.getCell().getCol();
+
+        Cell cellToChange = board.getBoard().get(row).get(col);
+        cellToChange.setCellState(CellState.FILLED);
+        cellToChange.setPlayer(currentMovePlayer);
+        Move finalMoveObject = new Move(cellToChange, currentMovePlayer);
+        moves.add(finalMoveObject);
+
+        nextMovePlayerIndex += 1;
+        nextMovePlayerIndex %= players.size();
+
+        if (checkWinner(board, finalMoveObject)) {
+            gameState = GameState.WIN;
+            winner = currentMovePlayer;
+        }
+
+        if (moves.size() == this.board.getSize()*this.board.getSize()){
+            gameState = GameState.DRAW;
+        }
     }
 
     public Board getBoard() {
