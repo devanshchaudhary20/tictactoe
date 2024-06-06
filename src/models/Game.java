@@ -167,9 +167,7 @@ public class Game {
         if (checkWinner(board, finalMoveObject)) {
             gameState = GameState.WIN;
             winner = currentMovePlayer;
-        }
-
-        if (moves.size() == this.board.getSize()*this.board.getSize()){
+        } else if (moves.size() == this.board.getSize()*this.board.getSize()){
             gameState = GameState.DRAW;
         }
     }

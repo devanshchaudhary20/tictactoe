@@ -1,5 +1,8 @@
 import controllers.GameController;
 import models.*;
+import strategies.winningstrategies.ColumnWinningStrategy;
+import strategies.winningstrategies.DiagonalWinningStrategy;
+import strategies.winningstrategies.RowWinningStrategy;
 import strategies.winningstrategies.WinningStrategy;
 
 import java.util.ArrayList;
@@ -19,7 +22,11 @@ public class Main {
                     new Bot(2L, new Symbol('O'), "GPT", BotDifficultyLevel.MEDIUM)
             );
 
-            List<WinningStrategy> winningStrategies = new ArrayList<>();
+            List<WinningStrategy> winningStrategies = List.of(
+                    new ColumnWinningStrategy(),
+                    new RowWinningStrategy(),
+                    new DiagonalWinningStrategy()
+            );
 
             Game game = gameController.startGame(
                 dimension,
@@ -34,11 +41,16 @@ public class Main {
                 gameController.printBoard(game);
                 gameController.makeMove(game);
             }
+            GameState gameState = gameController.checkState(game);
+            System.out.println("Game is finished!");
+            if (gameState.equals(GameState.DRAW)) {
+                System.out.println("It is a Draw!");
+            } else {
+                System.out.println("Winner is " + gameController.getWinner(game).getName() + "!");
+            }
         }
         catch (Exception e){
-            System.out.println("Somthing went wrong");
+            System.out.println("Something went wrong");
         }
-
-        System.out.println("Game is Created!");
     }
 }
