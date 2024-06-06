@@ -7,10 +7,12 @@ import strategies.winningstrategies.WinningStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         GameController gameController = new GameController();
+        Scanner scanner = new Scanner(System.in);
         System.out.println("GAME IS STARTING");
         try {
             int dimension = 3;
@@ -39,6 +41,13 @@ public class Main {
                 // 2. x's turn
                 // 3. ask to make move
                 gameController.printBoard(game);
+                System.out.println("Does anyone want to undo? (y/n)");
+                String undoAnswer = scanner.next();
+
+                if (undoAnswer.equals("y")){
+                    gameController.undo(game);
+                    continue;
+                }
                 gameController.makeMove(game);
             }
             GameState gameState = gameController.checkState(game);

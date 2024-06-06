@@ -28,4 +28,14 @@ public class ColumnWinningStrategy implements WinningStrategy{
 
         return symbolCounts.get(symbol).equals(board.getSize());
     }
+
+    @Override
+    public void handleUndo(Board board, Move move) {
+        int col = move.getCell().getCol();
+        Symbol symbol = move.getPlayer().getSymbol();
+
+        Map<Symbol, Integer> symbolCounts = counts.get(col);
+
+        symbolCounts.put(symbol, symbolCounts.get(symbol) - 1);
+    }
 }
